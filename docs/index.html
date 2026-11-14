@@ -1,97 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-
-  <title>
-    Multi-Tenant RAG Retrieval |
-    Python, FastAPI and Qdrant
-  </title>
-
-  <meta name="description"
-        content="Multi-tenant RAG-oriented retrieval
-        service using Python, FastAPI,
-        Qdrant, Sentence Transformers,
-        vector embeddings, semantic caching
-        and tenant-filtered document retrieval.">
-
-  <meta name="robots" content="index, follow">
-
-  <link rel="canonical"
-        href="https://su394611-del.github.io/RAG/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#08131c">
+  <meta name="author" content="Sudhanshu Shukla">
+  <meta name="description" content="Multi-tenant RAG-oriented retrieval in Python using FastAPI, Qdrant, BGE Sentence Transformers, tenant-filtered vector search, semantic caching, and local API examples.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://su394611-del.github.io/RAG-service/">
+  <title>Multi-Tenant RAG Retrieval | FastAPI, Qdrant &amp; Python</title>
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="Sudhanshu Shukla | AI Engineering">
+  <meta property="og:title" content="Multi-Tenant RAG Retrieval | FastAPI, Qdrant &amp; Python">
+  <meta property="og:description" content="Multi-tenant RAG-oriented retrieval in Python using FastAPI, Qdrant, BGE Sentence Transformers, tenant-filtered vector search, semantic caching, and local API examples.">
+  <meta property="og:url" content="https://su394611-del.github.io/RAG-service/">
+  <meta property="og:image" content="https://su394611-del.github.io/assets/social-preview.png">
+  <meta property="og:image:alt" content="Sudhanshu Shukla AI engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Multi-Tenant RAG Retrieval | FastAPI, Qdrant &amp; Python">
+  <meta name="twitter:description" content="Multi-tenant RAG-oriented retrieval in Python using FastAPI, Qdrant, BGE Sentence Transformers, tenant-filtered vector search, semantic caching, and local API examples.">
+  <meta name="twitter:image" content="https://su394611-del.github.io/assets/social-preview.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1c28'/%3E%3Ctext x='32' y='43' font-family='Arial' text-anchor='middle' font-size='28' font-weight='bold' fill='%2374e9d7'%3ER%3C/text%3E%3C/svg%3E">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://su394611-del.github.io/RAG-service/#author","name":"Sudhanshu Shukla","url":"https://su394611-del.github.io/","sameAs":["https://github.com/su394611-del"]},{"@type":"WebSite","@id":"https://su394611-del.github.io/RAG-service/#website","name":"Multi-Tenant RAG Retrieval Service","url":"https://su394611-del.github.io/RAG-service/","inLanguage":"en"},{"@type":"WebPage","@id":"https://su394611-del.github.io/RAG-service/#page","url":"https://su394611-del.github.io/RAG-service/","name":"Multi-Tenant RAG Retrieval | FastAPI, Qdrant & Python","description":"Multi-tenant RAG-oriented retrieval in Python using FastAPI, Qdrant, BGE Sentence Transformers, tenant-filtered vector search, semantic caching, and local API examples.","inLanguage":"en","author":{"@id":"https://su394611-del.github.io/RAG-service/#author"},"about":{"@id":"https://su394611-del.github.io/RAG-service/#software"}},{"@type":"SoftwareSourceCode","@id":"https://su394611-del.github.io/RAG-service/#software","name":"Multi-Tenant RAG Retrieval Service","description":"Multi-tenant RAG-oriented retrieval in Python using FastAPI, Qdrant, BGE Sentence Transformers, tenant-filtered vector search, semantic caching, and local API examples.","codeRepository":"https://github.com/su394611-del/RAG-service","url":"https://su394611-del.github.io/RAG-service/","programmingLanguage":"Python","runtimePlatform":"Python 3.12","license":"https://www.apache.org/licenses/LICENSE-2.0","author":{"@id":"https://su394611-del.github.io/RAG-service/#author"},"keywords":["multi-tenant retrieval","Qdrant","FastAPI","Sentence Transformers","semantic cache","BGE embeddings","retrieval augmented generation"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AI portfolio","item":"https://su394611-del.github.io/"},{"@type":"ListItem","position":2,"name":"Multi-Tenant RAG Retrieval","item":"https://su394611-del.github.io/RAG-service/"}]}]}</script>
+  <style>
+    :root{--bg:#07121a;--bg2:#091923;--paper:#0e222d;--panel:#102933;--panel2:#122e3b;--stroke:#28424d;--stroke2:#355560;--text:#effaff;--muted:#a5bec8;--soft:#809eaa;--teal:#75ead5;--blue:#8cbfff;--mint:#b9ffd0;--shade:0 22px 70px rgba(0,0,0,.24);--width:1220px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}
+    body{margin:0;color:var(--text);background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+    body:before{content:"";position:absolute;z-index:-1;pointer-events:none;top:0;left:0;width:100%;height:760px;background:radial-gradient(ellipse at 80% 4%,rgba(28,144,145,.20),transparent 47%),radial-gradient(ellipse at 2% 0%,rgba(68,104,226,.12),transparent 40%)}
+    a{color:inherit;text-decoration:none}a:hover{color:#c9fff3}button{font:inherit;cursor:pointer}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:4px}::selection{background:#267d77;color:white}
+    .wrap{width:min(var(--width),calc(100% - 64px));margin-inline:auto}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+    .skip{position:fixed;left:20px;top:-100px;z-index:1000;background:white;color:#04141c;padding:10px 16px;border-radius:8px}.skip:focus{top:16px}
+    .topbar{position:sticky;z-index:30;top:0;border-bottom:1px solid rgba(155,207,213,.12);background:rgba(7,18,26,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+    .top-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;min-height:74px}.brand{display:flex;gap:12px;align-items:center;flex-shrink:0}.mark{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,var(--teal),#7ba7ff);color:#08202c;font-size:18px;font-weight:950;letter-spacing:-.08em}.brandcopy{display:flex;flex-direction:column;line-height:1.15}.brandcopy strong{font-size:14px;font-weight:850}.brandcopy small{font-size:10px;color:#8fb1c1;letter-spacing:.13em;margin-top:5px;font-weight:750}.nav{display:flex;gap:25px;align-items:center}.nav>a{color:#b2c7d0;font-size:12px;font-weight:700}.nav>a:hover{color:white}.nav>.navcta{border:1px solid #446976;padding:9px 15px;border-radius:9px;color:#ddf7f5}
+    .mobilemenu{display:none;position:relative}.mobilemenu summary{padding:10px 13px;list-style:none;border:1px solid var(--stroke2);border-radius:9px;font-size:12px;color:#deeeee;font-weight:800}.mobilemenu summary::-webkit-details-marker{display:none}.mobilemenu[open] .mobile-links{display:flex}.mobile-links{position:absolute;right:0;top:44px;min-width:190px;padding:10px;display:flex;flex-direction:column;gap:3px;background:#10242e;border:1px solid var(--stroke);border-radius:12px;box-shadow:var(--shade)}.mobile-links a{padding:9px 10px;font-size:13px;border-radius:7px}.mobile-links a:hover{background:#183843}
+    .hero{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(400px,.97fr);gap:56px;align-items:center;min-height:600px;padding-block:88px 72px}.eyebrow{font-size:10px;letter-spacing:.18em;color:#8de7db;font-weight:900;text-transform:uppercase;display:inline-flex;gap:10px;align-items:center}.eyebrow:before{content:"";height:7px;width:7px;background:#69e6c0;border-radius:50%;box-shadow:0 0 0 5px rgba(105,230,192,.10)}
+    h1{font-size:clamp(45px,5.3vw,72px);line-height:1.07;letter-spacing:-.063em;margin:21px 0 26px;font-weight:850}h1 em{font-style:normal;background:linear-gradient(120deg,#6deed2,#86baff);color:transparent;background-clip:text;-webkit-background-clip:text}
+    .lead{color:#bbccd6;max-width:650px;font-size:17px;line-height:1.8;margin:0 0 28px}.buttonrow{display:flex;gap:11px;flex-wrap:wrap}.btn{display:inline-flex;gap:11px;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:10px;font-size:13px;font-weight:800;border:1px solid #466574;transition:transform .15s,background .15s}.btn:hover{transform:translateY(-2px)}.btn-main{background:linear-gradient(110deg,#79efdb,#98c6ff);color:#092130;border-color:transparent}.btn-main:hover{color:#08202d}.btn-outline{background:rgba(255,255,255,.02)}.subnote{margin:20px 0 0;color:#8eabb6;font-size:12px;max-width:550px}
+    .hero-panel{border:1px solid #2c5059;border-radius:22px;min-height:448px;background:linear-gradient(140deg,#14303b,#0b1c29 80%);padding:25px;box-shadow:var(--shade);overflow:hidden;position:relative}.hero-panel:before{content:"";inset:0;position:absolute;opacity:.22;background-image:linear-gradient(#42616a 1px,transparent 1px),linear-gradient(90deg,#42616a 1px,transparent 1px);background-size:27px 27px;mask-image:linear-gradient(to bottom,#000,transparent)}.diagram-heading{display:flex;position:relative;align-items:center;justify-content:space-between;font-size:11px;font-weight:850;letter-spacing:.09em;color:#b8d1d7;gap:10px}.live-bullet{display:inline-flex;align-items:center;gap:6px;color:#7bebbd;white-space:nowrap}.live-bullet:before{content:"";height:6px;width:6px;background:#7bebbd;border-radius:50%}
+    .request{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 16px;margin:27px auto 18px;border:1px solid #456673;background:#153844;border-radius:12px;max-width:275px;color:#e4ffff;font-size:12px;font-weight:800}.arrowdown{text-align:center;position:relative;color:#6abfae;font-weight:800;line-height:1}.processing{display:grid;grid-template-columns:1fr 1fr;gap:9px;position:relative;margin:12px 0}.pipenode{background:#102c39;border:1px solid #3a5865;border-radius:10px;padding:14px 8px;text-align:center;color:#c5dfe6;font-size:11px;font-weight:750}.pipenode b{display:block;color:#82eddf;font-size:19px;font-weight:800;line-height:1.3}.pipe-center{margin:12px auto;position:relative;text-align:center;border-radius:12px;background:#143d48;border:1px solid #357575;color:#b7fbec;padding:14px;font-weight:800;font-size:12px;max-width:295px}.pipe-result{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;position:relative;font-weight:750;font-size:11px;color:#bcd4df;margin-top:10px}.pipe-result span{padding:8px 11px;border-radius:7px;background:#1a3040;border:1px solid #365264}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--stroke);border-radius:15px;overflow:hidden;margin:0 0 100px;background:#17333d}.stat{padding:23px 26px;background:#0e232c}.stat:not(:last-child){border-right:1px solid var(--stroke)}.stat b{display:block;font-size:23px;line-height:1.15;letter-spacing:-.04em}.stat small{font-size:12px;color:var(--muted);margin-top:8px;display:block}
+    section.block{padding:0 0 95px}section.block+section.block{padding-top:5px}.sectionhead{margin-bottom:29px;display:flex;justify-content:space-between;align-items:end;gap:16px}.kicker{font-size:10px;letter-spacing:.2em;color:#7de2cc;text-transform:uppercase;font-weight:900;margin:0 0 11px}h2{font-size:clamp(30px,3vw,43px);letter-spacing:-.052em;line-height:1.16;margin:0;font-weight:820}.sectiondesc{margin:13px 0 0;max-width:720px;color:var(--muted);font-size:14px;line-height:1.75}.section-side{color:#7799a6;font-size:11px;font-weight:700;white-space:nowrap}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.card{background:linear-gradient(140deg,#122c37,#0c202a);border:1px solid var(--stroke);padding:25px;min-width:0;border-radius:16px;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-3px);border-color:#558e8e}.cardtop{display:flex;align-items:center;justify-content:space-between;gap:12px}.cardico{width:43px;height:43px;border:1px solid #375862;border-radius:12px;display:grid;place-items:center;color:#9deada;font-size:20px;background:#1b3b43}.cardnumber{font-size:10px;letter-spacing:.12em;font-weight:850;color:#709ca6}.card h3{font-size:17px;letter-spacing:-.026em;margin:20px 0 8px;line-height:1.35}.card p{font-size:12.8px;color:#a8c2ca;margin:0;line-height:1.7}.card strong{color:#dffbf4}
+    .architecture{background:radial-gradient(circle at 85% 5%,rgba(66,136,130,.11),transparent 42%),linear-gradient(125deg,#122d38,#0b202b);border:1px solid #2d4b54;padding:32px;border-radius:20px}.archrow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:stretch}.archstep{position:relative;min-width:0;padding:19px 11px 17px;border:1px solid #35545c;background:#102934;border-radius:11px;min-height:133px;text-align:center}.archstep:after{content:"→";position:absolute;right:-12px;top:45%;z-index:2;color:#85d6ca;font-size:18px;font-weight:900}.archstep:last-child:after{display:none}.archstep .digit{font-size:10px;color:#83e5d6;letter-spacing:.15em;font-weight:850}.archstep b{font-size:12px;display:block;margin:11px 0 7px;line-height:1.3}.archstep p{font-size:10.5px;color:#9bb9c3;line-height:1.5;margin:0}.archfoot{font-size:12px;color:#aec6ca;line-height:1.75;margin:19px 0 0}.archfoot strong{color:#c7fff2}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:stretch}.feature-panel{background:#0e2530;border:1px solid #2d4855;border-radius:18px;padding:31px}.feature-panel h3{font-size:22px;margin:0 0 8px;letter-spacing:-.04em}.feature-panel>p{font-size:13px;color:var(--muted);margin:0 0 20px}.bullets{list-style:none;padding:0;margin:0;display:grid;gap:12px}.bullets li{position:relative;padding-left:26px;font-size:13px;line-height:1.6;color:#bfd7d9}.bullets li:before{content:"✓";position:absolute;left:0;top:0;color:#71dfc5;font-weight:900}.bullets code, .feature-panel code{color:#9eecda;background:#173945;padding:1px 5px;border-radius:4px;font-size:.9em}
+    .modebox{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #35535d;background:#102a35;border-radius:15px;overflow:hidden}.modebox>div{padding:20px;border-right:1px solid #35535d}.modebox>div:last-child{border:0}.modebox code{color:#94f0dc;font-weight:900}.modebox p{font-size:12px;color:#a6c0c9;margin:8px 0 0}
+    .endpoints{overflow-x:auto;border:1px solid var(--stroke);border-radius:15px}.endpoints table{width:100%;border-collapse:collapse;text-align:left;min-width:630px}.endpoints th{background:#15333e;text-transform:uppercase;font-size:10px;letter-spacing:.1em;color:#94b8c3;font-weight:900}.endpoints td{color:#c2d7dd;font-size:12.5px}.endpoints th,.endpoints td{padding:17px 19px;border-bottom:1px solid #294651}.endpoints tr:last-child td{border-bottom:0}.endpoints code{color:#98f4e1;word-break:break-word}.method{font-weight:900;color:#cfecf7}
+    .setup{display:grid;grid-template-columns:1.08fr .92fr;gap:22px}.terminal{background:#050f17;border:1px solid #36505b;border-radius:17px;overflow:hidden;min-width:0}.terminalbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 20px;background:#11222d;border-bottom:1px solid #314752;color:#b8d0d7;font-size:11px;font-weight:800}.terminalbar span:before{content:"●  ●  ●";color:#6aa6a5;letter-spacing:.1em;margin-right:10px}.copy{border:1px solid #486973;background:#17313b;color:#d3f6ec;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:800}.copy:hover{background:#25505b}.terminal pre{margin:0;padding:22px 20px 28px;overflow:auto;line-height:1.9;color:#b7eacb;font-size:12px;tab-size:2;white-space:pre}.terminal .comment{color:#8da9b6}.sideintro{border:1px solid #304a56;border-radius:17px;background:#0e2630;padding:28px}.sideintro h3{margin:0 0 12px;font-size:20px}.sideintro p{color:#a5bdc6;font-size:13px}.sideintro ol{padding-left:18px;color:#c4d7de;font-size:13px;line-height:2}.sideintro code{color:#a3f2db}.muted-note{font-size:12px;color:#8cabb7;line-height:1.7}
+    .resourcegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.resource{display:flex;gap:14px;align-items:start;justify-content:space-between;padding:19px 21px;border:1px solid #33535b;border-radius:12px;background:#102a34;min-width:0;transition:background .2s,border-color .2s}.resource:hover{background:#183743;border-color:#73c7c0}.resource b{font-size:13px;display:block;overflow-wrap:anywhere;line-height:1.45}.resource small{font-size:11px;color:#a2bac4;line-height:1.5;display:block;margin-top:7px}.resource .end{color:#86e4d1;font-size:17px}
+    .disclaimer{display:flex;align-items:flex-start;gap:17px;padding:27px 29px;margin-bottom:97px;background:linear-gradient(105deg,#132c33,#102633);border:1px solid #3d665c;border-radius:16px}.disclaimer-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;color:#b0ffe1;background:#1c4a49;flex:0 0 auto;font-weight:900}.disclaimer b{font-size:15px}.disclaimer p{margin:6px 0 0;color:#a9c4ca;font-size:12.5px;line-height:1.75}
+    .faq{display:grid;grid-template-columns:1fr 1fr;gap:12px}.faq details{border:1px solid var(--stroke);border-radius:12px;padding:16px 20px;background:#102631}.faq summary{font-size:13px;font-weight:800;color:#e4f5f5;cursor:pointer}.faq p{color:#aac4cb;font-size:12.5px;line-height:1.7;margin:11px 0 0}.faq summary::marker{color:#79f1d8}
+    footer{border-top:1px solid #2a4853;padding:26px 0 32px}.foot{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;color:#83a8b5;font-size:11.5px}.foot-links{display:flex;gap:20px}.foot-links a{color:#a3d4d7}
+    @media(max-width:1150px){.hero{grid-template-columns:minmax(0,1fr) minmax(340px,.85fr);gap:25px}.cards,.resourcegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.archrow{grid-template-columns:repeat(4,1fr)}.archstep:nth-child(4):after{display:none}.modebox{grid-template-columns:1fr 1fr}.modebox>div:nth-child(2){border-right:0}.modebox>div:nth-child(-n+2){border-bottom:1px solid var(--stroke)}}
+    @media(max-width:820px){.wrap{width:calc(100% - 40px)}.hero{grid-template-columns:1fr;min-height:0;padding-block:70px 50px}.hero-panel{min-height:420px;max-width:680px}.stats{grid-template-columns:1fr 1fr;margin-bottom:75px}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--stroke)}.split,.setup{grid-template-columns:1fr}.archrow{grid-template-columns:repeat(3,minmax(0,1fr))}.archstep:nth-child(4):after{display:block}.archstep:nth-child(3n):after{display:none}.nav{gap:14px}.nav>a:not(.navcta){display:none}.sectionhead{align-items:start;display:block}.section-side{display:block;margin-top:9px}section.block{padding-bottom:76px}}
+    @media(max-width:560px){.wrap{width:calc(100% - 32px)}.top-inner{min-height:68px}.brandcopy strong{font-size:12px}.brandcopy small{font-size:8px}.mark{width:39px;height:39px}.nav{display:none}.mobilemenu{display:block}.hero{padding-top:55px;gap:32px}.hero h1{font-size:clamp(40px,10vw,55px)}.lead{font-size:14.5px}.buttonrow{display:grid;grid-template-columns:1fr 1fr}.btn{padding-inline:10px;font-size:11px}.hero-panel{min-height:395px;padding:19px}.request{margin-top:28px}.diagram-heading{font-size:9px}.processing{gap:7px}.pipenode{font-size:10px}.stats{margin-bottom:69px}.stat{padding:18px 14px}.stat b{font-size:21px}.stat small{font-size:10px}.cards,.resourcegrid,.faq{grid-template-columns:1fr}.architecture{padding:18px}.archrow{grid-template-columns:1fr 1fr}.archstep:nth-child(3n):after{display:block}.archstep:nth-child(2n):after{display:none}.archstep{min-height:118px;padding:15px 7px}.archstep b{font-size:11px}.modebox{grid-template-columns:1fr 1fr}.modebox>div{padding:15px}.feature-panel{padding:23px}.disclaimer{padding:20px}.sectiondesc{font-size:13px}.terminal pre{font-size:10.5px}.terminalbar{padding-inline:13px}}
+    @media(max-width:365px){.buttonrow{grid-template-columns:1fr}.hero h1{font-size:38px}.brandcopy small{display:none}.hero-panel{padding:12px}.hero-panel .pipe-result{font-size:9.5px}.modebox{grid-template-columns:1fr}.modebox>div{border-right:0!important;border-bottom:1px solid #35535d}.modebox>div:last-child{border:0}.brandcopy strong{font-size:11px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
 </head>
-
 <body>
-  <header>
-    <h1>Multi-Tenant RAG Retrieval Service</h1>
+<a class="skip" href="#features">Skip to features</a>
+<header class="topbar"><div class="wrap top-inner">
+ <a class="brand" href="https://su394611-del.github.io/" aria-label="Sudhanshu Shukla AI portfolio"><span class="mark" aria-hidden="true">R.</span><span class="brandcopy"><strong>RAG / Retrieval</strong><small>AI ENGINEERING · SOURCE PROJECT</small></span></a>
+ <nav class="nav" aria-label="Primary navigation"><a href="#features">Features</a><a href="#architecture">Architecture</a><a href="#api">API</a><a href="#quickstart">Quick start</a><a href="https://github.com/su394611-del/RAG-service" class="navcta" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+ <details class="mobilemenu"><summary>Menu ☰</summary><div class="mobile-links"><a href="#features">Features</a><a href="#architecture">Architecture</a><a href="#api">API</a><a href="#quickstart">Quick start</a><a href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></details>
+</div></header>
+<main>
+<section class="hero wrap" aria-labelledby="page-title"><div>
+ <div class="eyebrow">Open-source Python engineering · 2026</div>
+ <h1 id="page-title">Multi-tenant RAG.<br><em>Retrieval by design.</em></h1>
+ <p class="lead">Explore a tenant-aware retrieval service built with <strong>Python, FastAPI, Qdrant and Sentence Transformers</strong>. It combines vector embeddings, semantic caching, contextual filtering and an API interface into a reproducible engineering demonstration.</p>
+ <div class="buttonrow"><a class="btn btn-main" href="#architecture">Explore architecture <span aria-hidden="true">↗</span></a><a class="btn btn-outline" href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer">View source code <span aria-hidden="true">↗</span></a></div>
+ <p class="subnote">Focus: retrieval, tenant boundaries and API behavior. Responses are knowledge-base excerpts, not LLM-generated text.</p>
+</div>
+<div class="hero-panel" role="img" aria-label="RAG architecture diagram: request enters auth and input checks, passes through semantic cache, embeddings and Qdrant retrieval to evidence excerpts">
+ <div class="diagram-heading"><span>RETRIEVAL SYSTEM / CONCEPTUAL FLOW</span><span class="live-bullet">Public demo</span></div>
+ <div class="request">◈ &nbsp; Request / Tenant context</div><div class="arrowdown" aria-hidden="true">↓</div>
+ <div class="processing"><div class="pipenode"><b>01</b>API authentication</div><div class="pipenode"><b>02</b>Input checks</div></div>
+ <div class="arrowdown" aria-hidden="true">↓</div><div class="pipe-center">◇ &nbsp; Semantic cache + TTL</div><div class="arrowdown" aria-hidden="true">↓</div>
+ <div class="processing"><div class="pipenode"><b>03</b>BGE embeddings</div><div class="pipenode"><b>04</b>Qdrant + tenant filter</div></div>
+ <div class="arrowdown" aria-hidden="true">↓</div><div class="pipe-result"><span>Source passages</span><span>Extractive results</span><span>Request metrics</span></div>
+</div></section>
+<div class="wrap"><div class="stats" aria-label="Technical overview"><div class="stat"><b>2</b><small>Sample tenants in the demo</small></div><div class="stat"><b>BGE-small</b><small>Sentence Transformer embeddings</small></div><div class="stat"><b>4</b><small>Documented API routes</small></div><div class="stat"><b>CPU + GPU</b><small>CPU default; CUDA optional</small></div></div></div>
+<section class="wrap block" id="features" aria-labelledby="features-title"><div class="sectionhead"><div><p class="kicker">01 / Capabilities</p><h2 id="features-title">Inside the retrieval stack.</h2><p class="sectiondesc">The repository combines model-backed vector search, tenant-context handling, defensive examples and observability into a cohesive Python workflow.</p></div><span class="section-side">Six implementation areas</span></div>
+<div class="cards">
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">⌕</span><span class="cardnumber">01 / VECTOR SEARCH</span></div><h3>Semantic embeddings</h3><p>Encode text with <strong>BAAI/bge-small-en-v1.5</strong> through Sentence Transformers; query a Qdrant collection using cosine similarity to retrieve relevant passages.</p></article>
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">◇</span><span class="cardnumber">02 / TENANCY</span></div><h3>Tenant-filtered retrieval</h3><p>Attach a <strong>tenant_id payload filter</strong> to vector search so the example knowledge bases for <strong>tenant_a</strong> and <strong>tenant_b</strong> remain separated by retrieval context.</p></article>
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">↺</span><span class="cardnumber">03 / CACHING</span></div><h3>Semantic caching + TTL</h3><p>Reuse similar results based on cosine similarity while distinguishing tenants, sessions and <strong>top_k</strong>; the cache is process-local and expires records by time.</p></article>
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">▣</span><span class="cardnumber">04 / API</span></div><h3>FastAPI interface</h3><p>Expose a local query endpoint with bearer-token checks, health status, tenant cache statistics and optional protected metrics. Request throttling is included as a demo control.</p></article>
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">◈</span><span class="cardnumber">05 / SAFEGUARDS</span></div><h3>Input handling patterns</h3><p>Explore <strong>regex-based PII redaction</strong> and heuristic prompt-injection flags. These are intentionally limited examples, not complete security defenses.</p></article>
+ <article class="card"><div class="cardtop"><span class="cardico" aria-hidden="true">▥</span><span class="cardnumber">06 / DEVELOPER WORKFLOW</span></div><h3>Diagnostics + notebooks</h3><p>Run dependency diagnostics, offline self-tests, real retrieval demos and a Jupyter notebook walkthrough. CPU mode works without a CUDA GPU.</p></article>
+</div></section>
+<section class="wrap block" id="architecture" aria-labelledby="architecture-title"><div class="sectionhead"><div><p class="kicker">02 / System architecture</p><h2 id="architecture-title">From query to evidence.</h2><p class="sectiondesc">A conceptual view of the request path, based on the repository README. The semantic cache can return a prior result before a new vector search.</p></div><span class="section-side">Tenant-scoped retrieval</span></div>
+<div class="architecture"><div class="archrow" aria-label="Seven conceptual processing stages">
+ <div class="archstep"><span class="digit">01</span><b>Client request</b><p>Query + bearer token</p></div>
+ <div class="archstep"><span class="digit">02</span><b>Authentication</b><p>Resolve tenant context</p></div>
+ <div class="archstep"><span class="digit">03</span><b>Input checks</b><p>PII patterns + heuristics</p></div>
+ <div class="archstep"><span class="digit">04</span><b>Semantic cache</b><p>Tenant, session, TTL</p></div>
+ <div class="archstep"><span class="digit">05</span><b>Embeddings</b><p>BGE-small-en-v1.5</p></div>
+ <div class="archstep"><span class="digit">06</span><b>Qdrant retrieval</b><p>Cosine + tenant filter</p></div>
+ <div class="archstep"><span class="digit">07</span><b>Evidence response</b><p>Excerpts and sources</p></div>
+ </div><p class="archfoot"><strong>Retrieval, not generation:</strong> the current implementation returns matching knowledge-base excerpts. It does not call a generative language model to compose final answers. Example records are fictional and intended for demonstrations.</p></div></section>
+<section class="wrap block" aria-labelledby="engineering-title"><div class="sectionhead"><div><p class="kicker">03 / Engineering details</p><h2 id="engineering-title">Built for reproducible exploration.</h2><p class="sectiondesc">The workflow separates retrieval behavior, simple defenses and operational instrumentation so each can be inspected directly in code.</p></div></div>
+<div class="split"><article class="feature-panel"><h3>Retrieval and isolation</h3><p>Core algorithmic and data-layer ideas in the repository.</p><ul class="bullets"><li>Vector representation with <code>BAAI/bge-small-en-v1.5</code></li><li>Qdrant payload conditions based on <code>tenant_id</code></li><li>Cosine-similarity nearest-neighbor passage search</li><li>Tenant and session scope in the process-memory cache</li><li>Cache expiration using a time-to-live policy</li><li>Optional local Qdrant persistence through <code>QDRANT_PATH</code></li></ul></article>
+<article class="feature-panel"><h3>API and observability</h3><p>Operational concepts for local experimentation.</p><ul class="bullets"><li>FastAPI routes for query, health and cache statistics</li><li>Per-tenant bearer tokens read from environment variables</li><li>Client-IP rate limiting in the demonstration</li><li>Request count, error, latency and cache-hit metrics</li><li>Optional process-memory metrics</li><li>Offline checks of isolation, caching and validation behavior</li></ul></article></div></section>
+<section class="wrap block" id="api" aria-labelledby="api-title"><div class="sectionhead"><div><p class="kicker">04 / REST interface</p><h2 id="api-title">Four documented API routes.</h2><p class="sectiondesc">Local development endpoints described in the README. API mode binds to loopback by default; keep tokens private and do not expose it publicly without security hardening.</p></div></div>
+<div class="endpoints"><table><caption class="visually-hidden">FastAPI endpoint reference</caption><thead><tr><th scope="col">Method</th><th scope="col">Route</th><th scope="col">Access</th><th scope="col">Purpose</th></tr></thead><tbody>
+<tr><td class="method">GET</td><td><code>/health</code></td><td>Public</td><td>Basic service health status</td></tr>
+<tr><td class="method">POST</td><td><code>/v1/query</code></td><td>Tenant bearer token</td><td>Tenant-scoped vector retrieval and excerpts</td></tr>
+<tr><td class="method">GET</td><td><code>/v1/cache/stats</code></td><td>Tenant bearer token</td><td>Cache statistics for the authorized tenant</td></tr>
+<tr><td class="method">GET</td><td><code>/v1/metrics</code></td><td>Optional admin token</td><td>Runtime metrics, when an admin token is set</td></tr>
+</tbody></table></div></section>
+<section class="wrap block" id="quickstart" aria-labelledby="quickstart-title"><div class="sectionhead"><div><p class="kicker">05 / Getting started</p><h2 id="quickstart-title">Run it locally.</h2><p class="sectiondesc">Clone the repository, install dependencies, check the environment, and run either an offline test or the model-backed demonstration. The first real demo downloads embedding model weights.</p></div><span class="section-side">Windows PowerShell</span></div>
+<div class="setup"><div class="terminal"><div class="terminalbar"><span>POWERSHELL / LOCAL SETUP</span><button class="copy" type="button" data-copy-target="rag-command" aria-label="Copy PowerShell commands">Copy</button></div><pre><code id="rag-command">git clone https://github.com/su394611-del/RAG-service.git
+cd RAG-service
 
-    <p>
-      A Python-based AI engineering project
-      demonstrating vector search, retrieval,
-      embeddings, semantic caching and
-      multi-tenant knowledge-base isolation.
-    </p>
-  </header>
+py -3.12 -m venv .venv-rag
+.\.venv-rag\Scripts\python.exe -m pip install -U pip
+.\.venv-rag\Scripts\python.exe -m pip install -r requirements.txt
 
-  <main>
-    <h2>Project Features</h2>
-    <ul>
-      <li>Python and FastAPI REST interface</li>
-      <li>Qdrant vector database</li>
-      <li>Hugging Face Sentence Transformers</li>
-      <li>BGE-small text embeddings</li>
-      <li>Tenant-filtered vector retrieval</li>
-      <li>Cosine similarity search</li>
-      <li>Semantic caching with TTL</li>
-      <li>Session and tenant cache separation</li>
-      <li>Illustrative PII redaction</li>
-      <li>Heuristic prompt-injection checks</li>
-      <li>Bearer-token API authentication</li>
-      <li>Rate limiting and request metrics</li>
-      <li>Python and Jupyter Notebook demos</li>
-      <li>CPU and optional CUDA support</li>
-    </ul>
+# Inspect installed packages; no model download
+.\.venv-rag\Scripts\python.exe RAG_Service_Corrected_2026_Diagnostics.py --doctor
 
-    <h2>System Architecture</h2>
-    <p>
-      Client request, tenant authentication,
-      input checks, semantic cache,
-      BGE embeddings, Qdrant vector retrieval,
-      and extractive knowledge-base results.
-    </p>
+# Exercise offline validation checks
+.\.venv-rag\Scripts\python.exe RAG_Service_Corrected_2026_Diagnostics.py --self-test
 
-    <h2>Retrieval and Embeddings</h2>
-    <p>
-      The service uses BAAI/bge-small-en-v1.5
-      embeddings and Qdrant payload filters
-      to retrieve relevant tenant-specific
-      knowledge-base passages.
-    </p>
-
-    <h2>Project Scope</h2>
-    <p>
-      This is an educational retrieval demo.
-      It returns excerpts rather than
-      LLM-generated answers. The security
-      controls are illustrative and have
-      not undergone production security review.
-    </p>
-
-    <h2>Source Code</h2>
-    <p>
-      <a href="https://github.com/su394611-del/RAG">
-        View RAG GitHub Repository
-      </a>
-    </p>
-
-    <h2>Technical Documentation</h2>
-    <p>
-      <a href="https://github.com/su394611-del/RAG/wiki">
-        View RAG GitHub Wiki
-      </a>
-    </p>
-  </main>
+# Load embeddings and run tenant-scoped queries
+.\.venv-rag\Scripts\python.exe RAG_Service_Corrected_2026_Diagnostics.py --demo</code></pre></div><aside class="sideintro"><h3>Three ways to explore</h3><ol><li><strong>Diagnostics:</strong> check available dependencies and accelerator support.</li><li><strong>Self-test:</strong> exercise isolation and validation without downloading the model.</li><li><strong>Retrieval demo:</strong> initialize BGE embeddings and Qdrant, then retrieve fictional sample passages.</li></ol><p class="muted-note">For the REST API, configure private tenant tokens through environment variables and start <code>--api</code>. See the README for setup, sample requests and safety notes.</p><a class="btn btn-outline" href="https://github.com/su394611-del/RAG-service/blob/main/README.md" target="_blank" rel="noopener noreferrer">Read complete setup ↗</a></aside></div></section>
+<section class="wrap block" id="modes" aria-labelledby="modes-title"><div class="sectionhead"><div><p class="kicker">06 / Execution modes</p><h2 id="modes-title">Choose your workflow.</h2><p class="sectiondesc">The recommended diagnostics implementation provides four command-line entry points.</p></div></div><div class="modebox"><div><code>--doctor</code><p>Dependency checks and optional GPU diagnostics.</p></div><div><code>--self-test</code><p>Offline exercises with mock embeddings and no model download.</p></div><div><code>--demo</code><p>BGE/Qdrant retrieval over two fictional tenant knowledge bases.</p></div><div><code>--api</code><p>Local FastAPI interface using environment-provided access tokens.</p></div></div></section>
+<section class="wrap block" id="resources" aria-labelledby="resources-title"><div class="sectionhead"><div><p class="kicker">07 / Source and documentation</p><h2 id="resources-title">Inspect the implementation.</h2><p class="sectiondesc">Open the code, notebook, dependencies and documentation. Source artifacts are maintained in the public repository.</p></div></div><div class="resourcegrid">
+<a class="resource" href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer"><span><b>GitHub repository</b><small>Browse the complete source tree and commit history</small></span><span class="end" aria-hidden="true">↗</span></a>
+<a class="resource" href="https://github.com/su394611-del/RAG-service/blob/main/README.md" target="_blank" rel="noopener noreferrer"><span><b>README.md</b><small>Architecture, API configuration, troubleshooting and scope</small></span><span class="end" aria-hidden="true">↗</span></a>
+<a class="resource" href="https://github.com/su394611-del/RAG-service/blob/main/RAG_Service_Corrected_2026_Diagnostics.py" target="_blank" rel="noopener noreferrer"><span><b>Python diagnostics entry point</b><small>Recommended CLI: doctor, self-test, demo and API</small></span><span class="end" aria-hidden="true">↗</span></a>
+<a class="resource" href="https://github.com/su394611-del/RAG-service/blob/main/RAG_Service_Corrected_2026_Diagnostics.ipynb" target="_blank" rel="noopener noreferrer"><span><b>Jupyter notebook</b><small>Cell-by-cell walkthrough and experiments</small></span><span class="end" aria-hidden="true">↗</span></a>
+<a class="resource" href="https://github.com/su394611-del/RAG-service/blob/main/requirements.txt" target="_blank" rel="noopener noreferrer"><span><b>Dependencies</b><small>Python libraries for the CLI, API and notebook</small></span><span class="end" aria-hidden="true">↗</span></a>
+<a class="resource" href="https://github.com/su394611-del/RAG-service/wiki" target="_blank" rel="noopener noreferrer"><span><b>Project wiki</b><small>External GitHub Wiki link; availability depends on published pages</small></span><span class="end" aria-hidden="true">↗</span></a>
+</div></section>
+<div class="wrap"><aside class="disclaimer" aria-label="Implementation scope"><span class="disclaimer-icon" aria-hidden="true">i</span><div><b>Scope and engineering boundaries</b><p>This is a retrieval and extractive-answering demonstration. It does not generate new answers with a language model. Tenant filtering, token handling, regex PII checks, pattern-based injection checks, rate limiting and process-local caching illustrate engineering patterns; they are not a substitute for penetration testing, formal isolation assurance, production load testing or a full security assessment. Never deploy the example API to a public network without independent review.</p></div></aside></div>
+<section class="wrap block" id="faq" aria-labelledby="faq-title"><div class="sectionhead"><div><p class="kicker">08 / Common questions</p><h2 id="faq-title">Questions before running.</h2></div></div><div class="faq">
+<details><summary>Does this application generate LLM responses?</summary><p>No. The currently documented response path returns knowledge-base excerpts, using embeddings to find relevant passages. The name describes a RAG-oriented retrieval component, not a full generative pipeline.</p></details>
+<details><summary>Do I need a GPU?</summary><p>No. The embedding model and retrieval can run on CPU. A compatible CUDA-enabled NVIDIA GPU and PyTorch installation are optional for embeddings.</p></details>
+<details><summary>How are the two sample tenants separated?</summary><p>Qdrant payload filters select records for the authorized tenant context. Cache entries are also scoped by tenant and session. These examples should not be treated as formal production security validation.</p></details>
+<details><summary>Does it connect to a production data source?</summary><p>The included demonstration uses fictional subscription and product documents. They do not represent verified information about a real company, and the metrics are local demo observations rather than measured production benchmarks.</p></details>
+</div></section>
+</main>
+<footer><div class="wrap foot"><span>© 2026 Sudhanshu Shukla · Original project materials · See repository license and third-party notices.</span><div class="foot-links"><a href="https://su394611-del.github.io/">Main portfolio</a><a href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#page-title">Back to top ↑</a></div></div></footer>
+<script>
+(() => {
+  'use strict';
+  for (const button of document.querySelectorAll('[data-copy-target]')) {
+    button.addEventListener('click', async () => {
+      const target = document.getElementById(button.dataset.copyTarget);
+      if (!target) return;
+      const text = target.textContent;
+      const original = button.textContent;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const area = document.createElement('textarea');
+          area.value = text; area.style.position = 'fixed'; area.style.opacity = '0';
+          document.body.appendChild(area); area.select();
+          if (!document.execCommand('copy')) throw new Error('Copy unavailable');
+          area.remove();
+        }
+        button.textContent = 'Copied ✓';
+      } catch (error) { button.textContent = 'Select & copy'; }
+      window.setTimeout(() => { button.textContent = original; }, 1800);
+    });
+  }
+  const mobileMenu = document.querySelector('.mobilemenu');
+  if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mobileMenu.open = false; }));
+})();
+</script>
 </body>
 </html>
