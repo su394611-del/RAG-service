@@ -4,6 +4,37 @@ An  multi-tenant **retrieval and extractive-answering** service built with Pytho
 
 > **Scope:** This is a *RAG-oriented retrieval production garde demo*. It retrieves tenant-filtered knowledge-base passages and returns excerpts by calling or not calling a generative LLM. Its security filters and example organization details are illustrative.
 
+## Run it in the cloud — Colab, Kaggle or Binder
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/su394611-del/RAG-service/blob/main/notebooks/RAG_Service_Colab_Kaggle.ipynb)
+[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/kernels/welcome?src=https://github.com/su394611-del/RAG-service/blob/main/notebooks/RAG_Service_Colab_Kaggle.ipynb)
+[![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/su394611-del/RAG-service/HEAD?labpath=notebooks%2FRAG_Service_Colab_Kaggle.ipynb)
+
+`notebooks/RAG_Service_Colab_Kaggle.ipynb` runs the whole service in one notebook, with **no API keys and no Hugging Face, Qdrant or OpenAI account**:
+
+1. **Data loading:** two fictional tenant knowledge bases plus about 3,200 public Wikipedia passages and 918 question/answer pairs from [`rag-datasets/rag-mini-wikipedia`](https://huggingface.co/datasets/rag-datasets/rag-mini-wikipedia) (CC BY 3.0), downloaded anonymously.
+2. **Vector database:** `BAAI/bge-small-en-v1.5` embeddings in a Qdrant collection (local mode, in memory) with a `tenant_id` payload filter on every query.
+3. **Service:** prompt-injection check, PII redaction, tenant/session semantic cache and extractive answers with source IDs; a demo shows tenant isolation (cross-tenant passages must be 0).
+4. **Evaluation:** hit@1, hit@5 and MRR on 200 dataset questions.
+5. **Optional generated answer** that cites passage IDs: Google's free Gemini models through `google.colab.ai` in Colab (no key), a Claude model with your own `ANTHROPIC_API_KEY`, or the Gemini API with `GEMINI_API_KEY`. Keys are read at run time and never saved.
+
+Colab and Kaggle need their own sign-in to run code; Binder needs none but can take a few minutes to start. On Kaggle, switch on *Internet* in *Notebook options* (this needs a phone-verified Kaggle account); without it the notebook still runs on a bundled corpus with hashing embeddings and a NumPy vector store, and says so. The notebook is executed on GitHub Actions after every change to `cloud/`, so its saved outputs show a real run.
+
+The same code runs as scripts:
+
+```bash
+python cloud/run_rag_cloud.py                  # install missing packages, demo + evaluation
+python cloud/run_rag_cloud.py --ask "Who invented the voltaic pile?" --tenant wiki --generate
+python cloud/run_rag_cloud.py --self-test      # offline checks, no downloads
+```
+
+| File | Purpose |
+|---|---|
+| `cloud/rag_cloud.py` | Data loading, embeddings, Qdrant vector store, tenant-filtered service, evaluation, optional generation |
+| `cloud/run_rag_cloud.py` | Command-line runner |
+| `cloud/build_notebook.py` | Rebuilds the notebook from `rag_cloud.py` (`--check` verifies it is in sync) |
+| `binder/requirements.txt` | CPU environment for Binder and the CI run |
+
 ## Features
 
 - **Tenant-filtered vector retrieval** using Qdrant payload filters.

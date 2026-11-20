@@ -1,0 +1,7 @@
+# Binder / CI environment for notebooks/RAG_Service_Colab_Kaggle.ipynb (CPU only).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers>=3.4
+qdrant-client>=1.12
+pandas
+pyarrow

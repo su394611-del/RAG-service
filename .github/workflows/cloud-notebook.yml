@@ -1,0 +1,68 @@
+name: Cloud notebook
+
+# Executes notebooks/RAG_Service_Colab_Kaggle.ipynb on a fresh CPU runner, the way a
+# new Colab or Binder session would (anonymous dataset + model downloads, no keys),
+# then commits the executed notebook so its outputs show on GitHub and in Colab.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "cloud/**"
+      - "binder/**"
+      - ".github/workflows/cloud-notebook.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cloud-notebook
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the notebook environment (CPU)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -q -r binder/requirements.txt nbconvert ipykernel
+
+      - name: Offline self-test
+        run: python cloud/run_rag_cloud.py --self-test
+
+      - name: Notebook matches cloud/rag_cloud.py
+        run: python cloud/build_notebook.py --check
+
+      - name: Execute the notebook
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/nbrun
+          cp notebooks/RAG_Service_Colab_Kaggle.ipynb /tmp/nbrun/
+          cd /tmp/nbrun
+          jupyter nbconvert --to notebook --execute --inplace \
+            --ExecutePreprocessor.timeout=1800 RAG_Service_Colab_Kaggle.ipynb 2>&1 | tail -5
+          cp RAG_Service_Colab_Kaggle.ipynb "$GITHUB_WORKSPACE/notebooks/"
+
+      - name: Command-line run
+        run: |
+          set -o pipefail
+          python cloud/run_rag_cloud.py --no-install --ask "Who invented the voltaic pile?" \
+            --json cloud/last-run.json 2>&1 | grep -v -i "warning" | tee cloud/last-run.txt
+
+      - name: Commit the executed notebook and run summary
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notebooks/RAG_Service_Colab_Kaggle.ipynb cloud/last-run.json cloud/last-run.txt 2>/dev/null || true
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "Cloud notebook: executed outputs from GitHub Actions [skip ci]"
+          git push
