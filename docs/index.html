@@ -59,6 +59,23 @@
     @media(max-width:365px){.buttonrow{grid-template-columns:1fr}.hero h1{font-size:38px}.brandcopy small{display:none}.hero-panel{padding:12px}.hero-panel .pipe-result{font-size:9.5px}.modebox{grid-template-columns:1fr}.modebox>div{border-right:0!important;border-bottom:1px solid #35535d}.modebox>div:last-child{border:0}.brandcopy strong{font-size:11px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
+<style id="ss-contact-styles">
+/* Contact section: the Formspree form lives at https://su394611-del.github.io/contact.html and is embedded via iframe. */
+.ss-contact{padding:clamp(56px,7vw,96px) 0;scroll-margin-top:88px}
+.ss-contact-inner{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,5vw,64px);align-items:start;padding-top:clamp(40px,5vw,64px);border-top:1px solid rgba(120,160,200,.18)}
+.ss-contact-copy .ss-contact-kicker{margin:0 0 12px;font-size:11px;font-weight:850;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan,var(--aqua,var(--teal,var(--mint,#7be2f0))))}
+.ss-contact h2{margin:0 0 14px;font-size:clamp(28px,3.2vw,42px);line-height:1.15;letter-spacing:-.04em;font-weight:820}
+.ss-contact-grad{background:linear-gradient(90deg,#7be2f0,#b3a9ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ss-contact-copy p{margin:0;color:var(--muted,#aabed5);line-height:1.7}
+.ss-contact-copy p.ss-contact-more{margin-top:16px;font-size:14px}
+.ss-contact-more a{color:var(--cyan,var(--aqua,var(--teal,var(--mint,#7be2f0))));text-decoration:none}
+.ss-contact-more a:hover,.ss-contact-more a:focus-visible{text-decoration:underline;text-underline-offset:3px}
+.ss-contact-frame{display:block;width:100%;height:560px;border:0;background:transparent;color-scheme:dark;transition:height .2s ease}
+.ss-contact-fallback{margin:10px 2px 0;font-size:12px;color:var(--muted,#aabed5);opacity:.85}
+.ss-contact-fallback a{color:inherit}
+@media (max-width:880px){.ss-contact-inner{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.ss-contact-frame{transition:none}}
+</style>
 </head>
   
 <body>
@@ -146,8 +163,14 @@ py -3.12 -m venv .venv-rag
 <details><summary>How are the two sample tenants separated?</summary><p>Qdrant payload filters select records for the authorized tenant context. Cache entries are also scoped by tenant and session. These examples should not be treated as formal production security validation.</p></details>
 <details><summary>Does it connect to a production data source?</summary><p>The included demonstration uses fictional subscription and product documents. They do not represent verified information about a real company, and the metrics are local demo observations rather than measured production benchmarks.</p></details>
 </div></section>
+<section aria-labelledby="contact-heading" class="ss-contact" id="contact">
+<div class="wrap ss-contact-inner">
+<div class="ss-contact-copy"><p class="ss-contact-kicker">Get in touch</p><h2 id="contact-heading">Questions about <span class="ss-contact-grad">this project?</span></h2><p>Ask about the code, a collaboration or an AI engineering role. Messages go straight to my inbox, and I'll reply by email.</p><p class="ss-contact-more">More work: <a href="https://su394611-del.github.io/">AI engineering portfolio ↗</a></p></div>
+<div class="ss-contact-form"><iframe class="ss-contact-frame" id="ss-contact-frame" loading="lazy" src="/contact.html?from=RAG-service" title="Contact form"></iframe><p class="ss-contact-fallback">Form not loading? <a href="/contact.html?from=RAG-service">Open the contact page ↗</a></p></div>
+</div>
+</section>
 </main>
-<footer><div class="wrap foot"><span>© 2026 Sudhanshu Shukla · Original project materials · See repository license and third-party notices.</span><div class="foot-links"><a href="https://su394611-del.github.io/">Main portfolio</a><a href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#page-title">Back to top ↑</a></div></div></footer>
+<footer><div class="wrap foot"><span>© 2026 Sudhanshu Shukla · Original project materials · See repository license and third-party notices.</span><div class="foot-links"><a href="#contact">Contact ↑</a><a href="https://su394611-del.github.io/">Main portfolio</a><a href="https://github.com/su394611-del/RAG-service" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#page-title">Back to top ↑</a></div></div></footer>
 <script>
 (() => {
   'use strict';
@@ -175,6 +198,10 @@ py -3.12 -m venv .venv-rag
   const mobileMenu = document.querySelector('.mobilemenu');
   if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mobileMenu.open = false; }));
 })();
+</script>
+<script>
+/* Resize the contact iframe to fit the form; /contact.html posts its height. */
+(function(){window.addEventListener('message',function(e){if(e.origin!==window.location.origin)return;var d=e.data;if(!d||d.type!=='contact-frame:height')return;var f=document.getElementById('ss-contact-frame');if(!f||e.source!==f.contentWindow)return;var h=Math.ceil(Number(d.height));if(h>0&&h<4000)f.style.height=h+'px';});})();
 </script>
 </body>
 </html>
