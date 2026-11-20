@@ -1,0 +1,26 @@
+Environment: GitHub Actions | internet: yes | Python 3.12.16
+Data: {"tenant_docs": 6, "data_source": "huggingface.co/datasets/rag-datasets/rag-mini-wikipedia (CC BY 3.0, no sign-in)", "wiki_passages": 3217, "qa_pairs": 918, "total_documents": 3223}
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6633.55it/s]
+  self.dim = int(self.model.get_sentence_embedding_dimension())
+Embedding 3223 passages with BAAI/bge-small-en-v1.5 on cpu ...
+Indexed 3223 points in Qdrant local (in memory) (114.69 s embed, 0.22 s index).
+Index: {"embedder": "BAAI/bge-small-en-v1.5 on cpu", "vector_store": "Qdrant local (in memory)", "dimensions": 384, "indexed_points": 3223, "embed_seconds": 114.69, "index_seconds": 0.22}
+
+Demo queries
+purpose                              | tenant   | answer                                                                 | sources                                             | cached | blocked | pii  
+-------------------------------------+----------+------------------------------------------------------------------------+-----------------------------------------------------+--------+---------+------
+tenant KB retrieval                  | tenant_a | Our API rate limits are 60 requests/min on Starter, 1000 requests/min… | a-0:product, a-1:billing, a-4:support               | False  | False   | -    
+same question again: semantic cache  | tenant_a | Our API rate limits are 60 requests/min on Starter, 1000 requests/min… | a-0:product, a-1:billing, a-4:support               | True   | False   | -    
+other tenant: must not see tenant_a  | tenant_b | The data export feature supports CSV, JSON, and Parquet formats with … | b-2:product                                         | False  | False   | -    
+tenant_b KB retrieval                | tenant_b | The data export feature supports CSV, JSON, and Parquet formats with … | b-2:product, b-5:product                            | False  | False   | -    
+public Wikipedia corpus              | wiki     | Abraham Lincoln (February 12, 1809 â April 15, 1865) was the sixtee… | w-278:wikipedia, w-1992:wikipedia, w-2878:wikipedia | False  | False   | -    
+tenant_a cannot read the wiki corpus | tenant_a | No relevant passage was found in this tenant's knowledge base.         | -                                                   | False  | False   | -    
+prompt-injection check               | tenant_a | Your request could not be processed. Please rephrase your question.    | -                                                   | False  | True    | -    
+PII redaction                        | tenant_a | Pro plan costs $49/month with a 20% discount for annual billing.       | a-1:billing, a-4:support, a-0:product               | False  | False   | email
+Cross-tenant passages returned: 0
+
+Retrieval evaluation: {"questions": 200, "top_k": 5, "hit@1": 0.49, "hit@5": 0.62, "mrr": 0.542, "avg_ms_per_query": 76.75, "metric": "answer string found in a retrieved passage (yes/no answers excluded)"}
+
+Q (wiki): Who invented the voltaic pile?
+A: In 1800, as the result of a professional disagreement over the galvanic response advocated by Luigi Galvani, he invented the voltaic pile, an early electric battery, which produced a steady electric current.
+Sources: w-2256:wikipedia, w-2264:wikipedia, w-2257:wikipedia
