@@ -187,6 +187,16 @@ def _read_parquet(url: str, name: str):
     return df
 
 
+def fix_mojibake(text: str) -> str:
+    """Repair UTF-8 text that was decoded as Latin-1 (the dataset was built that way: 'â\x80\x93' -> '–')."""
+    if not any(ch in text for ch in "âÃÂ"):
+        return text
+    try:
+        return text.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+
+
 def chunk_text(text: str, max_words: int = 180, overlap: int = 30) -> list[str]:
     words = text.split()
     if len(words) <= max_words:
@@ -207,7 +217,7 @@ def load_documents(source: str = "auto", limit: Optional[int] = None,
             passages = _read_parquet(PASSAGES_URL, "rag-mini-wikipedia-passages.parquet")
             questions = _read_parquet(QA_URL, "rag-mini-wikipedia-qa.parquet")
             for row in passages.itertuples(index=False):
-                text = str(getattr(row, "passage", "") or "").strip()
+                text = fix_mojibake(str(getattr(row, "passage", "") or "").strip())
                 if len(text) < 20:
                     continue
                 for j, chunk in enumerate(chunk_text(text, max_words)):
@@ -215,7 +225,8 @@ def load_documents(source: str = "auto", limit: Optional[int] = None,
                                          "wikipedia", HF_DATASET))
                 if limit and len(wiki) >= limit:
                     break
-            qa = [QAPair(str(r.question).strip(), str(r.answer).strip()) for r in questions.itertuples(index=False)]
+            qa = [QAPair(fix_mojibake(str(r.question).strip()), fix_mojibake(str(r.answer).strip()))
+                  for r in questions.itertuples(index=False)]
             info.update(data_source=f"huggingface.co/datasets/{HF_DATASET} (CC BY 3.0, no sign-in)")
         except Exception as exc:  # noqa: BLE001
             if source == "hf":
@@ -274,7 +285,8 @@ class BGEEmbedder:
                     device = "cpu"
             self.model = SentenceTransformer(MODEL_ID, device=device)
         self.device = device
-        self.dim = int(self.model.get_sentence_embedding_dimension())
+        get_dim = getattr(self.model, "get_embedding_dimension", None) or self.model.get_sentence_embedding_dimension
+        self.dim = int(get_dim())
         self.name = f"{MODEL_ID} on {device}"
 
     def encode_docs(self, texts: list[str], batch_size: int = 64) -> np.ndarray:
