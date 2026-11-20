@@ -12,8 +12,8 @@
   "vector_store": "Qdrant local (in memory)",
   "dimensions": 384,
   "indexed_points": 3223,
-  "embed_seconds": 114.69,
-  "index_seconds": 0.22
+  "embed_seconds": 83.75,
+  "index_seconds": 0.26
  },
  "demo": [
   {
@@ -25,7 +25,7 @@
    "cached": false,
    "blocked": false,
    "pii": "-",
-   "ms": 95.3,
+   "ms": 133.23,
    "cross_tenant": 0
   },
   {
@@ -49,7 +49,7 @@
    "cached": false,
    "blocked": false,
    "pii": "-",
-   "ms": 107.87,
+   "ms": 131.64,
    "cross_tenant": 0
   },
   {
@@ -61,19 +61,19 @@
    "cached": false,
    "blocked": false,
    "pii": "-",
-   "ms": 115.51,
+   "ms": 156.42,
    "cross_tenant": 0
   },
   {
    "purpose": "public Wikipedia corpus",
    "tenant": "wiki",
    "query": "Who was the 16th president of the United States?",
-   "answer": "Abraham Lincoln (February 12, 1809 \u00e2\u0080\u0093 April 15, 1865) was the sixteenth President of the United States, serving from March 4, 1861 until his assassination.",
+   "answer": "Abraham Lincoln (February 12, 1809 \u2013 April 15, 1865) was the sixteenth President of the United States, serving from March 4, 1861 until his assassination.",
    "sources": "w-278:wikipedia, w-1992:wikipedia, w-2878:wikipedia",
    "cached": false,
    "blocked": false,
    "pii": "-",
-   "ms": 109.72,
+   "ms": 133.3,
    "cross_tenant": 0
   },
   {
@@ -85,7 +85,7 @@
    "cached": false,
    "blocked": false,
    "pii": "-",
-   "ms": 122.21,
+   "ms": 157.11,
    "cross_tenant": 0
   },
   {
@@ -97,7 +97,7 @@
    "cached": false,
    "blocked": true,
    "pii": "-",
-   "ms": 0.04,
+   "ms": 0.05,
    "cross_tenant": 0
   },
   {
@@ -109,17 +109,17 @@
    "cached": false,
    "blocked": false,
    "pii": "email",
-   "ms": 137.68,
+   "ms": 188.77,
    "cross_tenant": 0
   }
  ],
  "evaluation": {
   "questions": 200,
   "top_k": 5,
-  "hit@1": 0.49,
+  "hit@1": 0.495,
   "hit@5": 0.62,
-  "mrr": 0.542,
-  "avg_ms_per_query": 76.75,
+  "mrr": 0.544,
+  "avg_ms_per_query": 109.32,
   "metric": "answer string found in a retrieved passage (yes/no answers excluded)"
  },
  "asked": {
