@@ -5,7 +5,7 @@ Modes:
   python RAG_Service_Corrected_2026.py --demo
   python RAG_Service_Corrected_2026.py --api
 
-Requires requirements_rag_2026.txt for --demo / --api. The self-test uses
+Requires requirements.txt for --demo / --api. The self-test uses
 small fake embeddings and does not download an ML model.
 
 SECURITY / SCOPE: In-memory demo data; illustrative regex PII/injection checks;

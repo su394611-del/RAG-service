@@ -5,7 +5,7 @@ Modes:
   python RAG_Service_Corrected_2026_Windows.py --demo
   python RAG_Service_Corrected_2026_Windows.py --api
 
-Install requirements_rag_2026_windows.txt for --demo / --api. The self-test uses
+Install requirements.txt for --demo / --api. The self-test uses
 small fake embeddings and does not download an ML model.
 
 SECURITY / SCOPE: In-memory demo data; illustrative regex PII/injection checks;
@@ -516,7 +516,7 @@ def main() -> None:
         raise SystemExit(
             "Missing Python packages: " + ", ".join(missing) + "\n"
             "Install dependencies with:\n"
-            "  python -m pip install -r requirements_rag_2026_windows.txt"
+            "  python -m pip install -r requirements.txt"
         )
 
     service = RAGService()
