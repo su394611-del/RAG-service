@@ -1,0 +1,4 @@
+[data-presentation="color-var-teal-text-decoration-underline"] { color:var(--teal);text-decoration:underline; }
+[data-presentation="margin-top-16px"] { margin-top:16px; }
+[data-presentation="margin-22px-0-0"] { margin:22px 0 0; }
+[data-presentation="margin-14px-0-0-max-width-880px"] { margin:14px 0 0;max-width:880px; }
